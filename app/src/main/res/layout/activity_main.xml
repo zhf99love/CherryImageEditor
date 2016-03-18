@@ -8,6 +8,7 @@
     tools:context="com.cherry.mr.cherryimageeditor.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -21,15 +22,20 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/pic"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="#e3e3e3"
+        android:layout_marginTop="?attr/actionBarSize" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:transitionName="shareName"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        android:src="@android:drawable/ic_dialog_email"
+        android:transitionName="shareName" />
 
 </android.support.design.widget.CoordinatorLayout>

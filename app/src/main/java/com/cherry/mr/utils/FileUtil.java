@@ -16,8 +16,6 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import net.xici.newapp.app.XiciApp;
-
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -33,55 +31,6 @@ public class FileUtil
 
 	public static final String PHOTOTMP = "upload.jpg";
 	
-	public static String getBasePath(){
-		String basepath = "";
-		try {
-			
-			File appCacheDir = XiciApp.getContext().getExternalFilesDir(null);
-			if(appCacheDir == null){
-				appCacheDir = XiciApp.getContext().getFilesDir();
-			}
-			if(appCacheDir == null){
-				String cacheDirPath = "/data/data/" + XiciApp.getContext().getPackageName() + "/files/";
-				appCacheDir = new File(cacheDirPath);
-			}
-			if(appCacheDir!=null){
-				basepath = appCacheDir.getAbsolutePath();
-				if (!appCacheDir.exists()) {
-					appCacheDir.mkdirs();
-				}
-			}
-			
-		} catch (Exception e) {
-		}
-		return basepath;
-	}
-	
-	public static String getPhotoPath(){
-		String photopath = getBasePath()+File.separator+"photo";
-		File file = new File(photopath);
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-		return photopath;
-	}
-	
-	public static String getFileCachePath(){
-		String cachepath = getBasePath()+File.separator+"cache";
-		File file = new File(cachepath);
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-		return cachepath;
-	}
-	
-	public static String getTempPhotoPaht(){
-		String photopath = getPhotoPath();
-	
-		return photopath+File.separator+PHOTOTMP; 
-	}
-	
-
 	public static void copy(String filesrcpath, String filedespath)
 			throws FileNotFoundException, IOException {
 		File srcfile = new File(filesrcpath);
