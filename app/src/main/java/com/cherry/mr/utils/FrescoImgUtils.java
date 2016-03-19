@@ -306,8 +306,8 @@ public class FrescoImgUtils {
 
         GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(context.getResources());
         GenericDraweeHierarchy hierarchy = builder
-                .setPlaceholderImage(context.getResources().getDrawable(R.drawable.pic_default), ScalingUtils.ScaleType.FIT_CENTER)
-                .setFailureImage(context.getResources().getDrawable(R.drawable.pic_default), ScalingUtils.ScaleType.FIT_CENTER)
+                .setPlaceholderImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
+                .setFailureImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
                 .setPressedStateOverlay(new ColorDrawable(0x44000000))
                 .build();
 

@@ -55,10 +55,10 @@ public class ImageRecycleAdapter extends RecyclerView.Adapter<ImageRecycleAdapte
         holder.item_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in = new Intent(context, MainActivity.class);
+                Intent in = new Intent(context, ImageDetailActivity.class);
                 in.putExtra("pic", listBean.get(position).path);
                 CherryApp.imageCache = holder.item_pic.getTopLevelDrawable();
-                context.startActivity(in, ActivityOptions.makeSceneTransitionAnimation((Activity) context, ((Activity) context).findViewById(R.id.fab), "shareName").toBundle());
+                context.startActivity(in);
             }
         });
     }

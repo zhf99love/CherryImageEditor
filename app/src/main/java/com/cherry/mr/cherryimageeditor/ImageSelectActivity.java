@@ -2,7 +2,6 @@ package com.cherry.mr.cherryimageeditor;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,19 +20,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
 
 import com.cherry.mr.utils.FrescoImgUtils;
-import com.cherry.mr.utils.UIUtil;
 import com.facebook.drawee.view.DraweeView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScrollingActivity extends AppCompatActivity {
+public class ImageSelectActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
     private RecyclerView recycleView;
@@ -45,7 +39,7 @@ public class ScrollingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scrolling);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("图片浏览");
         setSupportActionBar(toolbar);
@@ -59,20 +53,21 @@ public class ScrollingActivity extends AppCompatActivity {
         recycleView.setLayoutManager(new StaggeredGridLayoutManager(3,
                 StaggeredGridLayoutManager.VERTICAL));
         recycleView.setItemAnimator(new DefaultItemAnimator());
-        recycleView.setAdapter(new ImageRecycleAdapter(ScrollingActivity.this, listBeans));
+        recycleView.setAdapter(new ImageRecycleAdapter(ImageSelectActivity.this, listBeans));
 
         topImage = (DraweeView) findViewById(R.id.top_image);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                Intent in = new Intent(ScrollingActivity.this, MainActivity.class);
-                startActivity(in, ActivityOptions.makeSceneTransitionAnimation(ScrollingActivity.this, fab, "shareName").toBundle());
+                startActivity(new Intent(ImageSelectActivity.this, FullImageActivity.class));
+//                Intent in = new Intent(ImageSelectActivity.this, ImageDetailActivity.class);
+//                startActivity(in, ActivityOptions.makeSceneTransitionAnimation(ImageSelectActivity.this, fab, "shareName").toBundle());
             }
         });
 
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ScrollingActivity.this,
+            ActivityCompat.requestPermissions(ImageSelectActivity.this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     4);
             return;
