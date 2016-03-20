@@ -34,7 +34,6 @@ public class ImageSelectActivity extends AppCompatActivity {
     private RecyclerView recycleView;
     private DraweeView topImage;
 
-    private List<ImageBean> listBeans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,34 +45,23 @@ public class ImageSelectActivity extends AppCompatActivity {
         initView();
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     private void initView() {
-        listBeans = new ArrayList<ImageBean>();
         recycleView = (RecyclerView) findViewById(R.id.list);
         recycleView.setLayoutManager(new StaggeredGridLayoutManager(3,
                 StaggeredGridLayoutManager.VERTICAL));
         recycleView.setItemAnimator(new DefaultItemAnimator());
-        recycleView.setAdapter(new ImageRecycleAdapter(ImageSelectActivity.this, listBeans));
+        recycleView.setAdapter(new ImageRecycleAdapter(ImageSelectActivity.this, CherryApp.listBeans));
 
         topImage = (DraweeView) findViewById(R.id.top_image);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                startActivity(new Intent(ImageSelectActivity.this, FullImageActivity.class));
 //                Intent in = new Intent(ImageSelectActivity.this, ImageDetailActivity.class);
 //                startActivity(in, ActivityOptions.makeSceneTransitionAnimation(ImageSelectActivity.this, fab, "shareName").toBundle());
             }
         });
 
-        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ImageSelectActivity.this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    4);
-            return;
-        } else {
-            loadData();
-        }
     }
 
     @Override
@@ -84,6 +72,20 @@ public class ImageSelectActivity extends AppCompatActivity {
                 //用户同意使用write
                 loadData();
             }
+        }
+    }
+
+    @Override
+    @TargetApi(Build.VERSION_CODES.M)
+    protected void onResume() {
+        super.onResume();
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ImageSelectActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    4);
+            return;
+        } else {
+            loadData();
         }
     }
 
@@ -99,9 +101,9 @@ public class ImageSelectActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<ImageBean> list) {
                 super.onPostExecute(list);
-                listBeans = list;
-                ((ImageRecycleAdapter) recycleView.getAdapter()).setData(listBeans);
-                FrescoImgUtils.displayBigRectImage("file://" + list.get(0).path, topImage);
+                CherryApp.listBeans = list;
+                ((ImageRecycleAdapter) recycleView.getAdapter()).setData(list);
+                FrescoImgUtils.displayRectImage("file://" + list.get(0).path, topImage);
             }
 
         }.execute();

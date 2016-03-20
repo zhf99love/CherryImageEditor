@@ -30,10 +30,8 @@ public class ImageRecycleAdapter extends RecyclerView.Adapter<ImageRecycleAdapte
     }
 
     public void setData(List<ImageBean> listBean) {
-        this.listBean = new ArrayList<>();
-        notifyDataSetChanged();
         this.listBean = listBean;
-        notifyItemRangeInserted(0, listBean.size());
+        notifyDataSetChanged();
     }
 
     @Override
@@ -50,13 +48,13 @@ public class ImageRecycleAdapter extends RecyclerView.Adapter<ImageRecycleAdapte
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.item_pic.getLayoutParams();
         lp.height = listBean.get(position).imageHeight;
         holder.item_pic.setLayoutParams(lp);
-        FrescoImgUtils.displayBigRectImage("file://" + listBean.get(position).path, holder.item_pic);
+        FrescoImgUtils.displayRectImage("file://" + listBean.get(position).path, holder.item_pic);
 
         holder.item_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent in = new Intent(context, ImageDetailActivity.class);
-                in.putExtra("pic", listBean.get(position).path);
+                in.putExtra("position", position);
                 CherryApp.imageCache = holder.item_pic.getTopLevelDrawable();
                 context.startActivity(in);
             }

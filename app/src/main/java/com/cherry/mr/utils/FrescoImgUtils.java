@@ -271,8 +271,8 @@ public class FrescoImgUtils {
         }
 
         GenericDraweeHierarchy hierarchy = new GenericDraweeHierarchyBuilder(context.getResources())
-                .setPlaceholderImage(context.getResources().getDrawable(R.drawable.default_img), ScalingUtils.ScaleType.FIT_CENTER)
-                .setFailureImage(context.getResources().getDrawable(R.drawable.default_img), ScalingUtils.ScaleType.FIT_CENTER)
+                .setPlaceholderImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
+                .setFailureImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
                 .setPressedStateOverlay(new ColorDrawable(0x44000000))
                 .build();
 
@@ -298,7 +298,7 @@ public class FrescoImgUtils {
      * @param url
      * @param draweeView
      */
-    public static void displayBigRectImage(String url, DraweeView draweeView, int width, int height, boolean isFitXY) {
+    public static void displayBigRectImage(String url, DraweeView draweeView, int width, int height) {
 
         if (url == null) {
             url = "";
@@ -308,10 +308,9 @@ public class FrescoImgUtils {
         GenericDraweeHierarchy hierarchy = builder
                 .setPlaceholderImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
                 .setFailureImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
-                .setPressedStateOverlay(new ColorDrawable(0x44000000))
+//                .setPressedStateOverlay(new ColorDrawable(0x44000000))
+                .setActualImageScaleType(ScalingUtils.ScaleType.CENTER_INSIDE)
                 .build();
-
-        if (isFitXY) hierarchy.setActualImageScaleType(ScalingUtils.ScaleType.FIT_XY);
 
         ImageRequest request = ImageRequestBuilder
                 .newBuilderWithSource(Uri.parse(url))
@@ -330,14 +329,6 @@ public class FrescoImgUtils {
         if (!draweeView.hasHierarchy())
             draweeView.setHierarchy(hierarchy);
         draweeView.setController(controller);
-    }
-
-    public static void displayBigRectImage(String url, DraweeView draweeView) {
-        displayBigRectImage(url, draweeView, 500, 500, false);
-    }
-
-    public static void displayBigRectImage(String url, DraweeView draweeView, int width, int height){
-        displayBigRectImage(url, draweeView, width, height, false);
     }
 
     public static String getavatarurl(long uid) {

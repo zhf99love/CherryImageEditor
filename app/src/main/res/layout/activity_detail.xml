@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="#000000"
     android:fitsSystemWindows="true"
     tools:context=".ImageDetailActivity">
 
@@ -23,12 +25,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/pic"
+    <!--<android.support.v7.widget.AppCompatImageView-->
+    <!--android:id="@+id/pic"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="400dp"-->
+    <!--android:background="#e3e3e3"-->
+    <!--android:layout_marginTop="?attr/actionBarSize" />-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/image_gallery"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="#e3e3e3"
-        android:layout_marginTop="?attr/actionBarSize" />
+        android:layout_height="match_parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -36,6 +43,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        android:src="@android:drawable/ic_menu_edit" />
 
 </android.support.design.widget.CoordinatorLayout>
