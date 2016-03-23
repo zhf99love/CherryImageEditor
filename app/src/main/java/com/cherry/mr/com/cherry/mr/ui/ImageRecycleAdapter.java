@@ -57,7 +57,6 @@ public class ImageRecycleAdapter extends RecyclerView.Adapter<ImageRecycleAdapte
             public void onClick(View v) {
                 Intent in = new Intent(context, ImageDetailActivity.class);
                 in.putExtra("position", position);
-                CherryApp.imageCache = holder.item_pic.getTopLevelDrawable();
                 context.startActivity(in);
             }
         });

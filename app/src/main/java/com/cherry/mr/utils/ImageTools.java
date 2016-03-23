@@ -6,6 +6,10 @@ import java.lang.ref.WeakReference;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 
 /**
  * Tools for handler picture
@@ -14,9 +18,7 @@ import android.graphics.BitmapFactory;
  * 
  */
 public final class ImageTools {
-	
 
-	
 	/**
 	 * Save image to the SD card 
 	 * @param photoBitmap
@@ -79,32 +81,18 @@ public final class ImageTools {
 		return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
 	}
 	
-	/**
-	 * ���·������bitmap
-	 * 
-	 * @param path
-	 *            ·��
-	 * @param w
-	 *            ��
-	 * @param h
-	 *            ��
-	 * @return
-	 */
-	public static final Bitmap convertToBitmap(String path, int w, int h) {
+	public static final Bitmap convertToBitmap(String path, DisplayMetrics metrics) {
 		try {
 			BitmapFactory.Options opts = new BitmapFactory.Options();
-			// ����Ϊtureֻ��ȡͼƬ��С
 			opts.inJustDecodeBounds = true;
-			opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
-			// ����Ϊ��
+			opts.inPreferredConfig = Bitmap.Config.RGB_565;
 			BitmapFactory.decodeFile(path, opts);
 			int width = opts.outWidth;
 			int height = opts.outHeight;
 			float scaleWidth = 0.f, scaleHeight = 0.f;
-			if (width > w || height > h) {
-				// ����
-				scaleWidth = ((float) width) / w;
-				scaleHeight = ((float) height) / h;
+			if (width > metrics.widthPixels || height > metrics.heightPixels) {
+				scaleWidth = ((float) width) / metrics.widthPixels;
+				scaleHeight = ((float) height) / metrics.heightPixels;
 			}
 			opts.inJustDecodeBounds = false;
 			float scale = Math.max(scaleWidth, scaleHeight);
@@ -120,5 +108,27 @@ public final class ImageTools {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * 转化drawable 为 bitmap
+	 *
+	 * @param drawable
+	 * @return
+	 */
+	public static Bitmap drawableToBitamp(Drawable drawable, DisplayMetrics metric) {
+		Bitmap bitmap;
+		int w = metric.widthPixels;
+		int h = metric.widthPixels;
+		System.out.println("Drawable转Bitmap");
+		Bitmap.Config config =
+				drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+						: Bitmap.Config.RGB_565;
+		bitmap = Bitmap.createBitmap(w, h, config);
+		//注意，下面三行代码要用到，否在在View或者surfaceview里的canvas.drawBitmap会看不到图
+		Canvas canvas = new Canvas(bitmap);
+		drawable.setBounds(0, 0, w, h);
+		drawable.draw(canvas);
+		return bitmap;
+	}
+
 }

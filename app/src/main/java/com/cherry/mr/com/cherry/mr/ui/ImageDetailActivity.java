@@ -1,6 +1,11 @@
 package com.cherry.mr.com.cherry.mr.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -19,17 +24,21 @@ import android.view.ViewGroup;
 import com.cherry.mr.cherryimageeditor.CherryApp;
 import com.cherry.mr.cherryimageeditor.R;
 import com.cherry.mr.utils.FrescoImgUtils;
+import com.cherry.mr.utils.UIUtil;
+import com.cherry.mr.utils.Utils;
 import com.facebook.drawee.view.DraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class ImageDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FloatingActionButton fab;
     private ViewPager imageGallery;
     private List<DraweeView> draweeViewList;
     private DisplayMetrics metric;
+
+    private int imagePosition;
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -133,11 +142,12 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void initView() {
+        imagePosition = getIntent().getIntExtra("position", 0);
         draweeViewList = new ArrayList<>();
         imageGallery = (ViewPager) findViewById(R.id.image_gallery);
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        for (int i = 0;i < CherryApp.listBeans.size();i++) {
+        for (int i = 0; i < CherryApp.listBeans.size(); i++) {
             DraweeView draweeView = new DraweeView(ImageDetailActivity.this);
             draweeView.setOnClickListener(this);
             draweeViewList.add(draweeView);
@@ -174,7 +184,7 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
 
         //ViewPager属性设置
         imageGallery.setOffscreenPageLimit(5);
-        imageGallery.setCurrentItem(getIntent().getIntExtra("position", 0));
+        imageGallery.setCurrentItem(imagePosition);
         getSupportActionBar().setTitle("图片" + (getIntent().getIntExtra("position", 0) + 1) + " / " + CherryApp.listBeans.size());
         imageGallery.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -184,6 +194,7 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onPageSelected(int position) {
+                imagePosition = position;
                 getSupportActionBar().setTitle("图片 " + (position + 1) + " / " + CherryApp.listBeans.size());
             }
 
@@ -200,13 +211,14 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
                         .setAction("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                Intent in = new Intent(ImageDetailActivity.this, EditorImageActivity.class);
+                                in.putExtra("tempImage", CherryApp.listBeans.get(imagePosition));
+                                startActivity(in);
                             }
                         }).show();
             }
         });
     }
-
 
     private void toggle() {
         if (mVisible) {

@@ -1,7 +1,6 @@
 package com.cherry.mr.cherryimageeditor;
 
 import android.app.Application;
-import android.graphics.drawable.Drawable;
 
 import com.cherry.mr.utils.FrescoImgUtils;
 
@@ -13,7 +12,6 @@ import java.util.List;
  */
 public class CherryApp extends Application {
 
-    public static Drawable imageCache;
     public static List<ImageBean> listBeans;
 
     @Override
