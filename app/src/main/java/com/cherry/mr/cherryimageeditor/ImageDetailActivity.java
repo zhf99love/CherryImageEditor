@@ -183,7 +183,7 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onPageSelected(int position) {
-                getSupportActionBar().setTitle("图片" + (position + 1) + " / " + CherryApp.listBeans.size());
+                getSupportActionBar().setTitle("图片 " + (position + 1) + " / " + CherryApp.listBeans.size());
             }
 
             @Override

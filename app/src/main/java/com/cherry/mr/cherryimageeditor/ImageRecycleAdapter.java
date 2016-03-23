@@ -22,11 +22,13 @@ import java.util.List;
 public class ImageRecycleAdapter extends RecyclerView.Adapter<ImageRecycleAdapter.ImageHolder> {
 
     List<ImageBean> listBean;
+    int[] imageHeight;
     Context context;
 
     public ImageRecycleAdapter(Context context, List<ImageBean> listBean) {
         this.context = context;
         this.listBean = listBean;
+        imageHeight = new int[500];
     }
 
     public void setData(List<ImageBean> listBean) {
@@ -42,11 +44,11 @@ public class ImageRecycleAdapter extends RecyclerView.Adapter<ImageRecycleAdapte
 
     @Override
     public void onBindViewHolder(final ImageHolder holder, final int position) {
-        if (listBean.get(position).imageHeight == 0)
-            listBean.get(position).imageHeight = getHeight();
+        if (imageHeight[position] == 0)
+            imageHeight[position] = getHeight();
 
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.item_pic.getLayoutParams();
-        lp.height = listBean.get(position).imageHeight;
+        lp.height = imageHeight[position];
         holder.item_pic.setLayoutParams(lp);
         FrescoImgUtils.displayRectImage("file://" + listBean.get(position).path, holder.item_pic);
 
@@ -63,7 +65,7 @@ public class ImageRecycleAdapter extends RecyclerView.Adapter<ImageRecycleAdapte
 
     //随机产生高度
     private int getHeight() {
-        int height = Utils.dpToPx(100 + (int) (Math.random() * 100), context.getResources());
+        int height = Utils.dpToPx((150 + (int) (Math.random() * 80)), context.getResources());
         return height;
     }
 

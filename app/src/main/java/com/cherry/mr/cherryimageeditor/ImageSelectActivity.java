@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +43,7 @@ public class ImageSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("图片浏览");
+        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         setSupportActionBar(toolbar);
         initView();
     }
@@ -57,10 +60,15 @@ public class ImageSelectActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-//                Intent in = new Intent(ImageSelectActivity.this, ImageDetailActivity.class);
-//                startActivity(in, ActivityOptions.makeSceneTransitionAnimation(ImageSelectActivity.this, fab, "shareName").toBundle());
+                new AlertDialog.Builder(ImageSelectActivity.this).setCancelable(true).setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setMessage("仅设计交流使用——图片编辑器\n\n\nby Cherry").setTitle("关于").show();
             }
         });
+        FrescoImgUtils.displayRectImage(Uri.parse("res:///" + R.drawable.head).toString(), topImage);
 
     }
 
@@ -103,7 +111,6 @@ public class ImageSelectActivity extends AppCompatActivity {
                 super.onPostExecute(list);
                 CherryApp.listBeans = list;
                 ((ImageRecycleAdapter) recycleView.getAdapter()).setData(list);
-                FrescoImgUtils.displayRectImage("file://" + list.get(0).path, topImage);
             }
 
         }.execute();

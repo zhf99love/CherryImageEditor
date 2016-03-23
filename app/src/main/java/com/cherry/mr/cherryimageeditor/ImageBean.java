@@ -5,7 +5,5 @@ package com.cherry.mr.cherryimageeditor;
  */
 public class ImageBean {
 
-
     public String path = "";
-    public int imageHeight = 0;
 }

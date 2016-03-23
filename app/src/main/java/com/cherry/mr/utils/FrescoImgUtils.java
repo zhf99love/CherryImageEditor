@@ -277,7 +277,7 @@ public class FrescoImgUtils {
                 .build();
 
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
-                .setResizeOptions(new ResizeOptions(400, 400))
+                .setResizeOptions(new ResizeOptions(450, 450))
                 .setAutoRotateEnabled(true)
                 .setLowestPermittedRequestLevel(ImageRequest.RequestLevel.FULL_FETCH)
                 .setImageType(ImageRequest.ImageType.DEFAULT)
@@ -309,7 +309,7 @@ public class FrescoImgUtils {
                 .setPlaceholderImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
                 .setFailureImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
 //                .setPressedStateOverlay(new ColorDrawable(0x44000000))
-                .setActualImageScaleType(ScalingUtils.ScaleType.CENTER_INSIDE)
+                .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
                 .build();
 
         ImageRequest request = ImageRequestBuilder
