@@ -1,4 +1,4 @@
-package com.cherry.mr.cherryimageeditor;
+package com.cherry.mr.com.cherry.mr.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
@@ -17,6 +16,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cherry.mr.cherryimageeditor.CherryApp;
+import com.cherry.mr.cherryimageeditor.R;
 import com.cherry.mr.utils.FrescoImgUtils;
 import com.facebook.drawee.view.DraweeView;
 

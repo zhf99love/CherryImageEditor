@@ -1,7 +1,5 @@
-package com.cherry.mr.cherryimageeditor;
+package com.cherry.mr.com.cherry.mr.ui;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.cherry.mr.cherryimageeditor.CherryApp;
+import com.cherry.mr.cherryimageeditor.ImageBean;
+import com.cherry.mr.cherryimageeditor.R;
 import com.cherry.mr.utils.FrescoImgUtils;
 import com.cherry.mr.utils.Utils;
 import com.facebook.drawee.view.DraweeView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

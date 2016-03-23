@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#f0f3f3"
     android:fitsSystemWindows="true"
-    tools:context=".ImageSelectActivity">
+    tools:context="com.cherry.mr.com.cherry.mr.ui.ImageSelectActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"

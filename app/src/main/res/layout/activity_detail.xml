@@ -7,7 +7,7 @@
     android:animateLayoutChanges="true"
     android:background="#000000"
     android:fitsSystemWindows="true"
-    tools:context=".ImageDetailActivity">
+    tools:context="com.cherry.mr.com.cherry.mr.ui.ImageDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"

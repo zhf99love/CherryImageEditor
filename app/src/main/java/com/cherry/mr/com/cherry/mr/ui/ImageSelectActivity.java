@@ -1,11 +1,9 @@
-package com.cherry.mr.cherryimageeditor;
+package com.cherry.mr.com.cherry.mr.ui;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,6 +21,9 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.cherry.mr.cherryimageeditor.CherryApp;
+import com.cherry.mr.cherryimageeditor.ImageBean;
+import com.cherry.mr.cherryimageeditor.R;
 import com.cherry.mr.utils.FrescoImgUtils;
 import com.facebook.drawee.view.DraweeView;
 
