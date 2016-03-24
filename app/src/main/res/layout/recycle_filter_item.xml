@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="90dp"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/filter_img"
+        android:layout_width="80dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/show_choice"
+        android:scaleType="centerCrop"/>
+
+</RelativeLayout>

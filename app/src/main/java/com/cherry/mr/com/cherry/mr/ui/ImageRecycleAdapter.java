@@ -2,6 +2,7 @@ package com.cherry.mr.com.cherry.mr.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public class ImageRecycleAdapter extends RecyclerView.Adapter<ImageRecycleAdapte
         if (imageHeight[position] == 0)
             imageHeight[position] = getHeight();
 
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.item_pic.getLayoutParams();
+        CardView.LayoutParams lp = (CardView.LayoutParams) holder.item_pic.getLayoutParams();
         lp.height = imageHeight[position];
         holder.item_pic.setLayoutParams(lp);
         FrescoImgUtils.displayRectImage("file://" + listBean.get(position).path, holder.item_pic);

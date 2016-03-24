@@ -1,5 +1,7 @@
 package com.cherry.mr.cherryimageeditor;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 /**
@@ -8,4 +10,6 @@ import java.io.Serializable;
 public class ImageBean implements Serializable {
 
     public String path = "";
+    public Bitmap originalBitmap;
+    public Bitmap tempBitmap;
 }
