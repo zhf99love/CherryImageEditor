@@ -6,10 +6,23 @@
     <ImageView
         android:id="@+id/filter_img"
         android:layout_width="80dp"
+        android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/show_choice"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/show_choice" />
+
+    <TextView
+        android:id="@+id/filter_num"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:background="@color/black_overlay"
+        android:gravity="center"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
 
 </RelativeLayout>

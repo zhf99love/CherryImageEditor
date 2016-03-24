@@ -1,7 +1,9 @@
 package com.cherry.mr.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import android.graphics.Bitmap;
@@ -9,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 
 /**
@@ -71,6 +74,44 @@ public final class ImageTools {
 				}
 			}
 		} 
+	}
+
+	public static void saveBitmap(String bitName,Bitmap mBitmap){
+
+		//验证地址是否存在
+		try {
+			File dir = new File(Environment.getExternalStorageDirectory() + "/CherryImg");
+			if (!dir.exists()) {
+				dir.mkdir();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		File f = new File(Environment.getExternalStorageDirectory() + "/CherryImg/" + bitName + ".png");
+		try {
+			f.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.toString();
+		}
+		FileOutputStream fOut = null;
+		try {
+			fOut = new FileOutputStream(f);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+		try {
+			fOut.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			fOut.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

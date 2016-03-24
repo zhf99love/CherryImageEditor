@@ -1,8 +1,10 @@
 package com.cherry.mr.com.cherry.mr.ui;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 import com.cherry.mr.cherryimageeditor.ImageBean;
 import com.cherry.mr.cherryimageeditor.R;
 import com.cherry.mr.touchview.TouchImageView;
+import com.cherry.mr.utils.BitmapUtil;
 import com.cherry.mr.utils.ImageTools;
 import com.cherry.mr.utils.UIUtil;
 import com.cherry.mr.utils.Utils;
@@ -147,12 +151,36 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_save, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             //重写ToolBar返回按钮的行为，防止重新打开父Activity重走生命周期方法
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_save:
+//                ImageTools.savePhotoToSDCard(imageBean.tempBitmap,
+//                        Environment.getExternalStorageDirectory() + "/CherryImgSave",
+//                        "Img" + System.currentTimeMillis() + ".png");
+                new AsyncTask<Void, Void, Void>(){
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        ImageTools.saveBitmap("Img" + System.currentTimeMillis(), imageBean.tempBitmap);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+                        UIUtil.showToast(EditorImageActivity.this, "保存成功~文件在/CherryImg/文件夹下");
+                    }
+                }.execute();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
