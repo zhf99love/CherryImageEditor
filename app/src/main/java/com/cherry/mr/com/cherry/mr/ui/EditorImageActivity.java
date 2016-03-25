@@ -164,9 +164,10 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 return true;
             case R.id.action_save:
-//                ImageTools.savePhotoToSDCard(imageBean.tempBitmap,
-//                        Environment.getExternalStorageDirectory() + "/CherryImgSave",
-//                        "Img" + System.currentTimeMillis() + ".png");
+                if(imageBean.tempBitmap == null) {
+                    UIUtil.showToast(EditorImageActivity.this, "还没有进行修改呢");
+                    break;
+                }
                 new AsyncTask<Void, Void, Void>(){
                     @Override
                     protected Void doInBackground(Void... params) {

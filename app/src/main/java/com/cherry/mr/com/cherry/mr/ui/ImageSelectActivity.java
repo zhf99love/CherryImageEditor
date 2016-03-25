@@ -75,9 +75,9 @@ public class ImageSelectActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 4){
+        if (requestCode == 4) {
             if (permissions[0].equals(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    &&grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //用户同意使用write
                 loadData();
             }
@@ -85,10 +85,9 @@ public class ImageSelectActivity extends AppCompatActivity {
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.M)
     protected void onResume() {
         super.onResume();
-        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(ImageSelectActivity.this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     4);
@@ -99,7 +98,7 @@ public class ImageSelectActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        new AsyncTask<Void, Void, List<ImageBean>>(){
+        new AsyncTask<Void, Void, List<ImageBean>>() {
 
             @Override
             protected List<ImageBean> doInBackground(Void... params) {
@@ -127,9 +126,9 @@ public class ImageSelectActivity extends AppCompatActivity {
         Cursor mCursor = mContentResolver.query(mImageUri, null,
                 MediaStore.Images.Media.MIME_TYPE + "=? or "
                         + MediaStore.Images.Media.MIME_TYPE + "=?",
-                new String[] { "image/jpeg", "image/png" }, MediaStore.Images.Media.DATE_MODIFIED + " DESC");
+                new String[]{"image/jpeg", "image/png"}, MediaStore.Images.Media.DATE_MODIFIED + " DESC");
 
-        if(mCursor == null){
+        if (mCursor == null) {
             return null;
         }
 
