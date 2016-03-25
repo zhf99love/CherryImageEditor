@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,21 +38,46 @@ import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 
 public class EditorImageActivity extends AppCompatActivity implements View.OnClickListener{
 
+    //普通模式
+    public final static int MODE_NORMAL = 0;
+    //滤镜模式
+    public final static int MODE_FILTER = 1;
+    //裁剪模式
+    public final static int MODE_CUT = 2;
+
+    //表示当前的模式
+    private int mode = 0;
+    //功能按钮 <裁剪，滤镜时使用>
+    private TextView change_button;
+
+    //图片主View
     private TouchImageView touchImageView;
 
+    //图片信息类
     private ImageBean imageBean;
 
     private ContentLoadingProgressBar progress_bar;
 
+    //底部菜单布局
     private FrameLayout menu_layout;
 
+    //滤镜菜单开启按钮
     private TextView filter_change;
-    private TextView cancel_filter;
 
+    //滤镜菜单
     private LinearLayout filterLayout;
 
+    //裁剪菜单开启按钮
     private TextView cut_change;
 
+    //裁剪菜单
+    private LinearLayout cutLayout;
+
+    //裁剪遮罩
+    private ImageView cut_frame;
+
+    //是否是圆形
+    private boolean isOval = true;
     /**
      * 加滤镜任务
      */
@@ -85,14 +111,15 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
         menu_layout = (FrameLayout) findViewById(R.id.menu_layout);
 
         filter_change = (TextView) findViewById(R.id.filter_change);
-        cancel_filter = (TextView) findViewById(R.id.cancel_filter);
-        cancel_filter.setOnClickListener(this);
+        change_button = (TextView) findViewById(R.id.change_button);
+        change_button.setOnClickListener(this);
         /**
          * 滤镜变换的添加
          */
         filter_change.setOnClickListener(this);
 
         cut_change = (TextView) findViewById(R.id.cut_change);
+        cut_frame = (ImageView) findViewById(R.id.cut_frame);
         cut_change.setOnClickListener(this);
 
         //显示图片
@@ -143,7 +170,7 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 progress_bar.hide();
-                cancel_filter.setVisibility(View.VISIBLE);
+                change_button.setVisibility(View.VISIBLE);
                 touchImageView.setImageBitmap(imageBean.tempBitmap);
             }
         };
@@ -189,46 +216,155 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.cancel_filter:
-                touchImageView.setImageBitmap(imageBean.originalBitmap);
-                cancel_filter.setVisibility(View.GONE);
+            case R.id.change_button:
+                switch (mode) {
+                    case MODE_FILTER:
+                        touchImageView.setImageBitmap(imageBean.originalBitmap);
+                        change_button.setVisibility(View.GONE);
+                        break;
+                    case MODE_CUT:
+                        touchImageView.setDrawingCacheEnabled(true);
+                        touchImageView.buildDrawingCache();
+                        final Bitmap bitmap = touchImageView.getDrawingCache();
+                        if (bitmap != null) {
+                            int x = (bitmap.getWidth() - Utils.dpToPx(320, getResources())) / 2;
+                            int y = (bitmap.getHeight() - Utils.dpToPx(320, getResources())) / 2;
+                            Bitmap cutBitmap = Bitmap.createBitmap(bitmap, x, y , Utils.dpToPx(320, getResources()), Utils.dpToPx(320, getResources()));
+                            cutBitmap = isOval ? ImageTools.toRoundBitmap(cutBitmap) : cutBitmap;
+                            imageBean.tempBitmap = cutBitmap;
+                            touchImageView.setImageBitmap(imageBean.tempBitmap);
+                            touchImageView.destroyDrawingCache();
+                        }
+                        //初始化
+                        menu_layout.removeView(cutLayout);
+                        change_button.setVisibility(View.GONE);
+                        cut_frame.setVisibility(View.GONE);
+                        mode = MODE_NORMAL;
+                        break;
+                }
                 break;
             case R.id.filter_change:
-                ImageView backView = new ImageView(EditorImageActivity.this);
-                backView.setImageResource(R.drawable.back);
-                backView.setBackground(ContextCompat.getDrawable(EditorImageActivity.this, R.drawable.press_state_bg));
-                backView.setScaleType(ImageView.ScaleType.CENTER);
-                backView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        menu_layout.removeView(filterLayout);
-                    }
-                });
+                mode = MODE_FILTER;
+                change_button.setText("取消滤镜");
+                if (filterLayout == null) {
+                    filterLayout = new LinearLayout(EditorImageActivity.this);
+                    filterLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    filterLayout.setBackgroundColor(ContextCompat.getColor(EditorImageActivity.this, R.color.normal_grey));
 
-                filterLayout = new LinearLayout(EditorImageActivity.this);
-                filterLayout.setOrientation(LinearLayout.HORIZONTAL);
-                filterLayout.setBackgroundColor(ContextCompat.getColor(EditorImageActivity.this, R.color.normal_grey));
-                filterLayout.addView(backView, Utils.dpToPx(60, getResources()), LinearLayout.LayoutParams.MATCH_PARENT);
+                    ImageView backView = new ImageView(EditorImageActivity.this);
+                    backView.setImageResource(R.drawable.back);
+                    backView.setBackground(ContextCompat.getDrawable(EditorImageActivity.this, R.drawable.press_state_bg));
+                    backView.setScaleType(ImageView.ScaleType.CENTER);
+                    backView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            menu_layout.removeView(filterLayout);
+                            change_button.setVisibility(View.GONE);
+                            mode = MODE_NORMAL;
+                        }
+                    });
 
-                RecyclerView recyclerView = new RecyclerView(EditorImageActivity.this);
-                recyclerView.setLayoutManager(new LinearLayoutManager(EditorImageActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                recyclerView.setBackgroundColor(ContextCompat.getColor(EditorImageActivity.this, R.color.normal_grey));
-                recyclerView.setAdapter(new FilterRecycleAdapter(EditorImageActivity.this) {
+                    RecyclerView recyclerView = new RecyclerView(EditorImageActivity.this);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(EditorImageActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    recyclerView.setBackgroundColor(ContextCompat.getColor(EditorImageActivity.this, R.color.normal_grey));
+                    recyclerView.setAdapter(new FilterRecycleAdapter(EditorImageActivity.this) {
 
-                    @Override
-                    void onFilterClick(GPUImageFilter filter) {
-                        progress_bar.show();
-                        executeChange(filter);
-                    }
+                        @Override
+                        void onFilterClick(GPUImageFilter filter) {
+                            progress_bar.show();
+                            executeChange(filter);
+                        }
 
-                });
-                filterLayout.addView(recyclerView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    });
+
+                    filterLayout.addView(backView, Utils.dpToPx(60, getResources()), LinearLayout.LayoutParams.MATCH_PARENT);
+                    filterLayout.addView(recyclerView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    filterLayout.setClickable(true);
+                }
 
                 menu_layout.addView(filterLayout, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 
                 break;
             case R.id.cut_change:
-                UIUtil.showToast(EditorImageActivity.this, "蠢逼，还没想怎么实现呢，点你妈比!");
+                mode = MODE_CUT;
+                change_button.setText("裁剪");
+                change_button.setVisibility(View.VISIBLE);
+                cut_frame.setVisibility(View.VISIBLE);
+                if (cutLayout == null) {
+                    cutLayout = new LinearLayout(EditorImageActivity.this);
+                    cutLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    cutLayout.setBackgroundColor(ContextCompat.getColor(EditorImageActivity.this, R.color.normal_grey));
+
+                    ImageView backView = new ImageView(EditorImageActivity.this);
+                    backView.setImageResource(R.drawable.back);
+                    backView.setBackground(ContextCompat.getDrawable(EditorImageActivity.this, R.drawable.press_state_bg));
+                    backView.setScaleType(ImageView.ScaleType.CENTER);
+                    backView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            menu_layout.removeView(cutLayout);
+                            change_button.setVisibility(View.GONE);
+                            cut_frame.setVisibility(View.GONE);
+                            mode = MODE_NORMAL;
+                        }
+                    });
+
+                    //分割线
+                    View divide1 = new View(EditorImageActivity.this);
+                    divide1.setBackgroundColor(ContextCompat.getColor(EditorImageActivity.this, R.color.text_color));
+                    View divide2 = new View(EditorImageActivity.this);
+                    divide2.setBackgroundColor(ContextCompat.getColor(EditorImageActivity.this, R.color.text_color));
+                    //menu
+                    final TextView tv1 = new TextView(EditorImageActivity.this);
+                    tv1.setText("圆形");
+                    tv1.setTextColor(ContextCompat.getColor(EditorImageActivity.this, R.color.text_color));
+                    tv1.setBackground(ContextCompat.getDrawable(EditorImageActivity.this, R.drawable.press_state_bg));
+                    tv1.setTextSize(16);
+                    tv1.setGravity(Gravity.CENTER);
+
+                    final TextView tv2 = new TextView(EditorImageActivity.this);
+                    tv2.setText("矩形");
+                    tv2.setTextColor(ContextCompat.getColor(EditorImageActivity.this, R.color.text_color));
+                    tv2.setBackground(ContextCompat.getDrawable(EditorImageActivity.this, R.drawable.press_state_bg));
+                    tv2.setTextSize(16);
+                    tv2.setGravity(Gravity.CENTER);
+
+                    LinearLayout.LayoutParams menuLp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                    LinearLayout.LayoutParams divideLp = new LinearLayout.LayoutParams(Utils.dpToPx(1, getResources()), LinearLayout.LayoutParams.MATCH_PARENT);
+                    divideLp.setMargins(0, Utils.dpToPx(10, getResources()), 0, Utils.dpToPx(10, getResources()));
+
+                    //圆形
+                    tv1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            tv1.setSelected(true);
+                            tv2.setSelected(false);
+                            isOval = true;
+                            cut_frame.setImageResource(R.drawable.oval_overlay);
+                        }
+                    });
+
+                    //矩形
+                    tv2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            tv1.setSelected(false);
+                            tv2.setSelected(true);
+                            isOval = false;
+                            cut_frame.setImageResource(R.drawable.rect_overlay);
+                        }
+                    });
+                    tv1.setSelected(true);
+
+                    cutLayout.addView(backView, menuLp);
+                    cutLayout.addView(divide1, divideLp);
+                    cutLayout.addView(tv1, menuLp);
+                    cutLayout.addView(divide2, divideLp);
+                    cutLayout.addView(tv2, menuLp);
+                    cutLayout.setClickable(true);
+                }
+
+                menu_layout.addView(cutLayout, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
                 break;
         }
     }

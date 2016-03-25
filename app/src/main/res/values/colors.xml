@@ -9,6 +9,7 @@
     <color name="white">#ffffffff</color>
     <color name="press_color">#ff45aa89</color>
     <color name="transparence">#00000000</color>
-    <color name="text_color">#78a2ff</color>
+    <color name="text_color">#78b2ff</color>
     <color name="normal_grey">#404040</color>
+    <color name="light_grey">#707070</color>
 </resources>

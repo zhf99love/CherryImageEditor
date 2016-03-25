@@ -42,8 +42,16 @@
                 android:adjustViewBounds="true"
                 android:background="@color/black" />
 
+            <ImageView
+                android:id="@+id/cut_frame"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/oval_overlay"
+                android:visibility="gone" />
+
             <TextView
-                android:id="@+id/cancel_filter"
+                android:id="@+id/change_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -51,7 +59,7 @@
                 android:layout_margin="15sp"
                 android:background="@color/black_overlay"
                 android:padding="10dp"
-                android:text="取消滤镜"
+                android:text="Menu"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:visibility="gone" />
@@ -67,7 +75,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/text_color"/>
+            android:background="@color/text_color" />
 
         <FrameLayout
             android:id="@+id/menu_layout"

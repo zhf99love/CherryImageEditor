@@ -10,6 +10,9 @@ import java.io.Serializable;
 public class ImageBean implements Serializable {
 
     public String path = "";
+
+    public String information = "";
+
     public Bitmap originalBitmap;
     public Bitmap tempBitmap;
 }
