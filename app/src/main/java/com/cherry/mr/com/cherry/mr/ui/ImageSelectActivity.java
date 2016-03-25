@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -132,17 +133,23 @@ public class ImageSelectActivity extends AppCompatActivity {
             return null;
         }
 
-//        while (mCursor.moveToNext() && listBeans.size() < 200) {
         while (mCursor.moveToNext()) {
             //获取图片的路径
             String path = mCursor.getString(mCursor
                     .getColumnIndex(MediaStore.Images.Media.DATA));
 
             //获取该图片的父路径名
-            String parentName = new File(path).getParentFile().getName();
+            File file = new File(path);
+            String sdName = Environment.getExternalStorageDirectory().getPath();
 
             ImageBean addMediaItem = new ImageBean();
             addMediaItem.path = path;
+            addMediaItem.parentName = file.getParentFile().getAbsolutePath().substring(sdName.length());
+            addMediaItem.imgName = file.getName();
+            addMediaItem.width = mCursor.getInt(mCursor
+                    .getColumnIndex(MediaStore.Images.Media.WIDTH));
+            addMediaItem.height = mCursor.getInt(mCursor
+                    .getColumnIndex(MediaStore.Images.Media.HEIGHT));
             listBeans.add(addMediaItem);
         }
         mCursor.close();

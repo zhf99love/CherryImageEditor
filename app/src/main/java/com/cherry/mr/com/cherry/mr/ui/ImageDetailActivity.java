@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.cherry.mr.cherryimageeditor.CherryApp;
 import com.cherry.mr.cherryimageeditor.R;
@@ -37,6 +38,8 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
     private ViewPager imageGallery;
     private List<DraweeView> draweeViewList;
     private DisplayMetrics metric;
+
+    private TextView information;
 
     private int imagePosition;
 
@@ -145,6 +148,7 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
         imagePosition = getIntent().getIntExtra("position", 0);
         draweeViewList = new ArrayList<>();
         imageGallery = (ViewPager) findViewById(R.id.image_gallery);
+        information = (TextView) findViewById(R.id.information);
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         for (int i = 0; i < CherryApp.listBeans.size(); i++) {
@@ -185,6 +189,9 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
         //ViewPager属性设置
         imageGallery.setOffscreenPageLimit(5);
         imageGallery.setCurrentItem(imagePosition);
+        information.setText("名称 : " + CherryApp.listBeans.get(imagePosition).imgName +
+                "\n地址 : " + CherryApp.listBeans.get(imagePosition).parentName +
+                "\nwidth : " + CherryApp.listBeans.get(imagePosition).width + "px\t\t height : " + CherryApp.listBeans.get(imagePosition).height + "px");
         getSupportActionBar().setTitle("图片" + (getIntent().getIntExtra("position", 0) + 1) + " / " + CherryApp.listBeans.size());
         imageGallery.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -195,6 +202,9 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onPageSelected(int position) {
                 imagePosition = position;
+                information.setText("名称 : " + CherryApp.listBeans.get(position).imgName +
+                        "\n地址 : " + CherryApp.listBeans.get(position).parentName +
+                        "\nwidth : " + CherryApp.listBeans.get(position).width + "px\t\t height : " + CherryApp.listBeans.get(position).height + "px");
                 getSupportActionBar().setTitle("图片 " + (position + 1) + " / " + CherryApp.listBeans.size());
             }
 

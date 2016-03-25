@@ -25,13 +25,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!--<android.support.v7.widget.AppCompatImageView-->
-    <!--android:id="@+id/pic"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="400dp"-->
-    <!--android:background="#e3e3e3"-->
-    <!--android:layout_marginTop="?attr/actionBarSize" />-->
-
     <android.support.v4.view.ViewPager
         android:id="@+id/image_gallery"
         android:layout_width="match_parent"
@@ -44,5 +37,15 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_menu_edit" />
+
+    <TextView
+        android:id="@+id/information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        android:textSize="15sp"
+        android:background="@color/black_overlay"/>
 
 </android.support.design.widget.CoordinatorLayout>

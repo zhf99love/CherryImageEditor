@@ -36,7 +36,7 @@ import com.cherry.mr.utils.Utils;
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 
-public class EditorImageActivity extends AppCompatActivity implements View.OnClickListener{
+public class EditorImageActivity extends AppCompatActivity implements View.OnClickListener {
 
     //普通模式
     public final static int MODE_NORMAL = 0;
@@ -123,7 +123,7 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
         cut_change.setOnClickListener(this);
 
         //显示图片
-        new AsyncTask<Void, Void, Void>(){
+        new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -148,6 +148,7 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
 
     /**
      * 更改滤镜方法
+     *
      * @param filter 滤镜类型
      */
     private void executeChange(GPUImageFilter filter) {
@@ -191,14 +192,14 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 return true;
             case R.id.action_save:
-                if(imageBean.tempBitmap == null) {
+                if (imageBean.tempBitmap == null) {
                     UIUtil.showToast(EditorImageActivity.this, "还没有进行修改呢");
                     break;
                 }
-                new AsyncTask<Void, Void, Void>(){
+                new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        ImageTools.saveBitmap("Img" + System.currentTimeMillis(), imageBean.tempBitmap);
+                        ImageTools.saveBitmap(EditorImageActivity.this, "Img" + System.currentTimeMillis(), imageBean.tempBitmap);
                         return null;
                     }
 
@@ -229,7 +230,7 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
                         if (bitmap != null) {
                             int x = (bitmap.getWidth() - Utils.dpToPx(320, getResources())) / 2;
                             int y = (bitmap.getHeight() - Utils.dpToPx(320, getResources())) / 2;
-                            Bitmap cutBitmap = Bitmap.createBitmap(bitmap, x, y , Utils.dpToPx(320, getResources()), Utils.dpToPx(320, getResources()));
+                            Bitmap cutBitmap = Bitmap.createBitmap(bitmap, x, y, Utils.dpToPx(320, getResources()), Utils.dpToPx(320, getResources()));
                             cutBitmap = isOval ? ImageTools.toRoundBitmap(cutBitmap) : cutBitmap;
                             imageBean.tempBitmap = cutBitmap;
                             touchImageView.setImageBitmap(imageBean.tempBitmap);
@@ -239,6 +240,7 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
                         menu_layout.removeView(cutLayout);
                         change_button.setVisibility(View.GONE);
                         cut_frame.setVisibility(View.GONE);
+                        imageBean.originalBitmap = imageBean.tempBitmap;
                         mode = MODE_NORMAL;
                         break;
                 }
@@ -260,6 +262,7 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
                         public void onClick(View v) {
                             menu_layout.removeView(filterLayout);
                             change_button.setVisibility(View.GONE);
+                            imageBean.originalBitmap = imageBean.tempBitmap;
                             mode = MODE_NORMAL;
                         }
                     });
@@ -306,6 +309,7 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
                             change_button.setVisibility(View.GONE);
                             cut_frame.setVisibility(View.GONE);
                             mode = MODE_NORMAL;
+                            imageBean.originalBitmap = imageBean.tempBitmap;
                         }
                     });
 
