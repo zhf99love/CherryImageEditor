@@ -1,11 +1,14 @@
-package me.relex.photodraweeview;
+package photodraweeview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -129,6 +132,13 @@ public class PhotoDraweeView extends SimpleDraweeView implements IAttacher {
         mAttacher.setOnViewTapListener(listener);
     }
 
+    public static final int OPGL_MAX_TEXTURE = 4000;
+
+    private boolean isBigPicture(int imageInfoWidth, int imageInfoHeight) {
+        //penGLRenderer: Bitmap too large to be uploaded into a texture (299x7200, max=4096x4096)
+        return imageInfoHeight >= OPGL_MAX_TEXTURE || imageInfoWidth >= OPGL_MAX_TEXTURE;
+    }
+
     @Override public OnPhotoTapListener getOnPhotoTapListener() {
         return mAttacher.getOnPhotoTapListener();
     }
@@ -138,6 +148,9 @@ public class PhotoDraweeView extends SimpleDraweeView implements IAttacher {
     }
 
     @Override public void update(int imageInfoWidth, int imageInfoHeight) {
+        if (isBigPicture(imageInfoWidth, imageInfoHeight)) {
+            PhotoDraweeView.this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
         mAttacher.update(imageInfoWidth, imageInfoHeight);
     }
 }

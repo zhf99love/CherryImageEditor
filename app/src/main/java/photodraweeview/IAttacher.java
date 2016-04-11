@@ -1,4 +1,4 @@
-package me.relex.photodraweeview;
+package photodraweeview;
 
 import android.view.GestureDetector;
 import android.view.View;

@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar" >
         <activity
-            android:name="com.cherry.mr.com.cherry.mr.ui.ImageSelectActivity"
+            android:name="com.cherry.mr.ui.ImageSelectActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +24,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cherry.mr.com.cherry.mr.ui.ImageDetailActivity"
+            android:name="com.cherry.mr.ui.ImageDetailActivity"
             android:label="@string/title_activity_main" />
         <activity
-            android:name="com.cherry.mr.com.cherry.mr.ui.EditorImageActivity"
+            android:name="com.cherry.mr.ui.EditorImageActivity"
             android:label="@string/title_activity_main" />
     </application>
 

@@ -7,7 +7,7 @@
     android:animateLayoutChanges="true"
     android:background="#000000"
     android:fitsSystemWindows="true"
-    tools:context="com.cherry.mr.com.cherry.mr.ui.ImageDetailActivity">
+    tools:context="com.cherry.mr.ui.ImageDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -25,7 +25,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
+    <com.cherry.mr.ui.MultiTouchViewPager
         android:id="@+id/image_gallery"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

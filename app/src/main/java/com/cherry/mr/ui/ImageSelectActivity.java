@@ -1,7 +1,6 @@
-package com.cherry.mr.com.cherry.mr.ui;
+package com.cherry.mr.ui;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;

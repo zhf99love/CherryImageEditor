@@ -1,11 +1,7 @@
-package com.cherry.mr.com.cherry.mr.ui;
+package com.cherry.mr.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -25,18 +21,17 @@ import android.widget.TextView;
 import com.cherry.mr.cherryimageeditor.CherryApp;
 import com.cherry.mr.cherryimageeditor.R;
 import com.cherry.mr.utils.FrescoImgUtils;
-import com.cherry.mr.utils.UIUtil;
-import com.cherry.mr.utils.Utils;
-import com.facebook.drawee.view.DraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import photodraweeview.PhotoDraweeView;
+
 public class ImageDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FloatingActionButton fab;
-    private ViewPager imageGallery;
-    private List<DraweeView> draweeViewList;
+    private MultiTouchViewPager imageGallery;
+    private List<PhotoDraweeView> draweeViewList;
     private DisplayMetrics metric;
 
     private TextView information;
@@ -147,12 +142,12 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
     private void initView() {
         imagePosition = getIntent().getIntExtra("position", 0);
         draweeViewList = new ArrayList<>();
-        imageGallery = (ViewPager) findViewById(R.id.image_gallery);
+        imageGallery = (MultiTouchViewPager) findViewById(R.id.image_gallery);
         information = (TextView) findViewById(R.id.information);
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         for (int i = 0; i < CherryApp.listBeans.size(); i++) {
-            DraweeView draweeView = new DraweeView(ImageDetailActivity.this);
+            PhotoDraweeView draweeView = new PhotoDraweeView(ImageDetailActivity.this);
             draweeView.setOnClickListener(this);
             draweeViewList.add(draweeView);
         }
@@ -175,7 +170,8 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 FrescoImgUtils.displayBigRectImage("file://" + CherryApp.listBeans.get(position).path,
-                        draweeViewList.get(position), metric.widthPixels, metric.heightPixels);
+                        draweeViewList.get(position),  metric.heightPixels > 4000);
+//                        draweeViewList.get(position), metric.widthPixels, metric.heightPixels);
                 container.addView(draweeViewList.get(position));
                 return draweeViewList.get(position);
             }

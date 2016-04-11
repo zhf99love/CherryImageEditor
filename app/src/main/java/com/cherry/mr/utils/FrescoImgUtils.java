@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
+import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Animatable;
@@ -26,6 +27,8 @@ import com.facebook.common.memory.NoOpMemoryTrimmableRegistry;
 import com.facebook.common.util.ByteConstants;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
+import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
@@ -39,10 +42,13 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
 import com.facebook.imagepipeline.decoder.ProgressiveJpegConfig;
+import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.image.ImmutableQualityInfo;
 import com.facebook.imagepipeline.image.QualityInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+
+import photodraweeview.PhotoDraweeView;
 
 
 /**
@@ -308,7 +314,6 @@ public class FrescoImgUtils {
         GenericDraweeHierarchy hierarchy = builder
                 .setPlaceholderImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
                 .setFailureImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
-//                .setPressedStateOverlay(new ColorDrawable(0x44000000))
                 .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
                 .build();
 
@@ -329,6 +334,44 @@ public class FrescoImgUtils {
         if (!draweeView.hasHierarchy())
             draweeView.setHierarchy(hierarchy);
         draweeView.setController(controller);
+    }
+
+    public static void displayBigRectImage(String url, final PhotoDraweeView draweeView, boolean needScale) {
+
+        if (url == null) {
+            url = "";
+        }
+
+        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(context.getResources());
+        GenericDraweeHierarchy hierarchy = builder
+                .setPlaceholderImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
+                .setFailureImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
+                .build();
+
+        if (needScale) {
+            hierarchy.setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
+        }
+
+        // 需要使用 ControllerBuilder 方式请求图片
+        PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
+        controller.setUri(url);
+        controller.setOldController(draweeView.getController());
+
+        // 需要设置 ControllerListener，获取图片大小后，传递给 PhotoDraweeView 更新图片长宽
+        controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
+            @Override
+            public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
+                super.onFinalImageSet(id, imageInfo, animatable);
+                if (imageInfo == null || draweeView == null) {
+                    return;
+                }
+                draweeView.update(imageInfo.getWidth(), imageInfo.getHeight());
+            }
+        });
+
+        if (!draweeView.hasHierarchy())
+            draweeView.setHierarchy(hierarchy);
+        draweeView.setController(controller.build());
     }
 
     public static String getavatarurl(long uid) {

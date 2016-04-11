@@ -1,4 +1,4 @@
-package com.cherry.mr.com.cherry.mr.ui;
+package com.cherry.mr.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,9 +6,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import com.cherry.mr.cherryimageeditor.CherryApp;
 import com.cherry.mr.cherryimageeditor.ImageBean;
 import com.cherry.mr.cherryimageeditor.R;
 import com.cherry.mr.utils.FrescoImgUtils;

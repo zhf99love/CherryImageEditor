@@ -1,4 +1,4 @@
-package me.relex.photodraweeview;
+package photodraweeview;
 
 /**
  * Interface definition for callback to be invoked when attached ImageView scale changes
