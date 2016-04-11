@@ -149,7 +149,7 @@ public abstract class FilterRecycleAdapter extends RecyclerView.Adapter<FilterRe
         filterList = new ArrayList<>();
         bitmapList = new ArrayList<>();
 
-        filterList.add(new GPUImageGaussianBlurFilter(1.5f));   //   //磨砂效果
+        filterList.add(new GPUImageBoxBlurFilter(2.0f));   //   //磨砂效果
         filterList.add(new GPUImageBrightnessFilter(0.3f)); //亮度增强
         filterList.add(new GPUImageBulgeDistortionFilter(0.4f, 0.5f, new PointF(0.5f, 0.5f)));
         filterList.add(new GPUImageColorBalanceFilter());   //
