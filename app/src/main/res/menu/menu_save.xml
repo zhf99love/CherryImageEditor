@@ -8,4 +8,11 @@
         android:icon="@android:drawable/ic_menu_save"
         android:title="保存"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_share"
+        android:orderInCategory="100"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="分享"
+        app:showAsAction="always" />
 </menu>

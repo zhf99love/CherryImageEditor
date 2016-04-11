@@ -2,6 +2,7 @@ package com.cherry.mr.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -21,13 +22,16 @@ import android.widget.TextView;
 import com.cherry.mr.cherryimageeditor.CherryApp;
 import com.cherry.mr.cherryimageeditor.R;
 import com.cherry.mr.utils.FrescoImgUtils;
+import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.imagepipeline.image.ImageInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import photodraweeview.OnViewTapListener;
 import photodraweeview.PhotoDraweeView;
 
-public class ImageDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class ImageDetailActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
     private MultiTouchViewPager imageGallery;
@@ -148,7 +152,12 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
 
         for (int i = 0; i < CherryApp.listBeans.size(); i++) {
             PhotoDraweeView draweeView = new PhotoDraweeView(ImageDetailActivity.this);
-            draweeView.setOnClickListener(this);
+            draweeView.setOnViewTapListener(new OnViewTapListener() {
+                @Override
+                public void onViewTap(View view, float x, float y) {
+                    toggle();
+                }
+            });
             draweeViewList.add(draweeView);
         }
 
@@ -168,10 +177,18 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
             }
 
             @Override
-            public Object instantiateItem(ViewGroup container, int position) {
+            public Object instantiateItem(ViewGroup container, final int position) {
                 FrescoImgUtils.displayBigRectImage("file://" + CherryApp.listBeans.get(position).path,
-                        draweeViewList.get(position),  metric.heightPixels > 4000);
-//                        draweeViewList.get(position), metric.widthPixels, metric.heightPixels);
+                        draweeViewList.get(position), new BaseControllerListener<ImageInfo>() {
+                            @Override
+                            public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
+                                super.onFinalImageSet(id, imageInfo, animatable);
+                                if (imageInfo == null || draweeViewList.get(position) == null) {
+                                    return;
+                                }
+                                draweeViewList.get(position).update(imageInfo.getWidth(), imageInfo.getHeight());
+                            }
+                        });
                 container.addView(draweeViewList.get(position));
                 return draweeViewList.get(position);
             }
@@ -269,8 +286,4 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-    @Override
-    public void onClick(View v) {
-        toggle();
-    }
 }

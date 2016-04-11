@@ -336,7 +336,7 @@ public class FrescoImgUtils {
         draweeView.setController(controller);
     }
 
-    public static void displayBigRectImage(String url, final PhotoDraweeView draweeView, boolean needScale) {
+    public static void displayBigRectImage(String url, final PhotoDraweeView draweeView, BaseControllerListener controllerListener) {
 
         if (url == null) {
             url = "";
@@ -348,26 +348,13 @@ public class FrescoImgUtils {
                 .setFailureImage(new ColorDrawable(0xff3399ff), ScalingUtils.ScaleType.FIT_CENTER)
                 .build();
 
-        if (needScale) {
-            hierarchy.setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
-        }
-
         // 需要使用 ControllerBuilder 方式请求图片
         PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
         controller.setUri(url);
         controller.setOldController(draweeView.getController());
 
         // 需要设置 ControllerListener，获取图片大小后，传递给 PhotoDraweeView 更新图片长宽
-        controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
-            @Override
-            public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
-                super.onFinalImageSet(id, imageInfo, animatable);
-                if (imageInfo == null || draweeView == null) {
-                    return;
-                }
-                draweeView.update(imageInfo.getWidth(), imageInfo.getHeight());
-            }
-        });
+        controller.setControllerListener(controllerListener);
 
         if (!draweeView.hasHierarchy())
             draweeView.setHierarchy(hierarchy);

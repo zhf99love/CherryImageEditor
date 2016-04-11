@@ -1,7 +1,10 @@
 package com.cherry.mr.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +29,8 @@ import com.cherry.mr.touchview.TouchImageView;
 import com.cherry.mr.utils.ImageTools;
 import com.cherry.mr.utils.UIUtil;
 import com.cherry.mr.utils.Utils;
+
+import java.io.File;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
@@ -190,22 +195,45 @@ public class EditorImageActivity extends AppCompatActivity implements View.OnCli
                     UIUtil.showToast(EditorImageActivity.this, "还没有进行修改呢");
                     break;
                 }
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        ImageTools.saveBitmap(EditorImageActivity.this, "Img" + System.currentTimeMillis(), imageBean.tempBitmap);
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void aVoid) {
-                        super.onPostExecute(aVoid);
-                        UIUtil.showToast(EditorImageActivity.this, "保存成功~文件在/CherryImg/文件夹下");
-                    }
-                }.execute();
+                savePic(true);
+                break;
+            case R.id.action_share:
+                if (imageBean.tempBitmap == null) {
+                    imageBean.tempBitmap = imageBean.originalBitmap;
+                }
+                shareMsg(savePic(false));
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String savePic(final boolean needNotice) {
+        final String picName = "Img" + System.currentTimeMillis();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                ImageTools.saveBitmap(EditorImageActivity.this, picName, imageBean.tempBitmap);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                if (needNotice)
+                    UIUtil.showToast(EditorImageActivity.this, "保存成功~文件在/CherryImg/文件夹下");
+            }
+        }.execute();
+
+        return Environment.getExternalStorageDirectory() + "/CherryImg/" + picName + ".png";
+    }
+
+    //分享图片
+    public void shareMsg(String imgPath) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        File file = new File(imgPath);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        shareIntent.setType("image/*");
+        startActivity(Intent.createChooser(shareIntent, this.getTitle()));
     }
 
     @Override
